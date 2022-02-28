@@ -1,9 +1,9 @@
+import datetime
+import dateutil.parser
+
 from tinder_api import session
 from tinder_api.utils import request_handlers as r
 from tinder_api.utils.wrapper import JsonWrapper
-
-import datetime
-import dateutil.parser
 
 
 class UserModel:
@@ -33,8 +33,8 @@ class UserModel:
             1 : 'spam'
             4 : 'inappropriate photos'
         """
-        resp = r.post('/report/{}'.format(self.id),
-                      {"cause": cause, "text": text})
+        resp = r.post(f'/report/{self.id}',
+                      {'cause': cause, 'text': text})
 
         return resp
 
@@ -49,17 +49,17 @@ class NormalUser(UserModel):
 
     def like(self):
         """ Likes (swipes right) the user """
-        resp = r.get('/like/{}'.format(self.id))
+        resp = r.get(f'/like/{self.id}')
         return resp['match']
 
     def super_like(self):
         """ Super likes (swipes up) the user """
-        resp = r.post('/like/{}/super'.format(self.id), {})
+        resp = r.post(f'/like/{self.id}/super', {})
         return resp['match']
 
     def dislike(self):
         """ Pass (swipes left) the user """
-        resp = r.post('/pass/{}'.format(self.id))
+        resp = r.post(f'/pass/{self.id}')
         return 'passed'
 
 
@@ -80,7 +80,7 @@ class MatchUser(UserModel):
 
     def message(self, body):
         """ Messages the user """
-        resp = r.post('/user/matches/{}'.format(self.match_id),
+        resp = r.post(f'/user/matches/{self.match_id}',
                       {"message": str(body)})
         return resp['sent_date']
 
@@ -107,7 +107,7 @@ class Message:
 
     def like_message(self):
         """ Likes a message """
-        resp = r.post('/message/{}/like'.format(self.message_id), {})
+        resp = r.post(f'/message/{self.message_id}/like', {})
 
         if 'error' in resp:
             return "Error, unable to like message"
@@ -116,7 +116,7 @@ class Message:
 
     def unlike_message(self):
         """ Unlikes a message """
-        resp = r.delete('/message/{}/like'.format(self.message_id))
+        resp = r.delete(f'/message/{self.message_id}/like')
 
         if resp.status_code == 204:
             return resp
@@ -157,7 +157,7 @@ class UserController:
             data = r.get('/profile')
             return data
         else:
-            data = r.get('/user/{}'.format(self.id))
+            data = r.get(f'/user/{self.id}')
         if 'error' in data:
             print('Error user was not found')
         return data['results']

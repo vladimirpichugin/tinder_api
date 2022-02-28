@@ -1,7 +1,6 @@
-import time
-
 import requests
 from urllib.parse import urlencode
+import time
 
 from tinder_api import user as u
 from tinder_api.utils import config as c
@@ -36,10 +35,9 @@ class Session:
     @staticmethod
     def get_meta(v=2):
         """ Returns meta information """
-        if v == 2:
-            resp = r.get('/v2/meta')
-        else:
-            resp = r.get('/meta')
+        url = '/v2/meta' if v == 2 else '/meta'
+
+        resp = r.get(url)
 
         return resp
 
@@ -106,7 +104,6 @@ class Session:
     @staticmethod
     def get_likes(page_token=None) -> requests.models.Response:
         """ Returns a [] of my likes """
-
         url = '/v2/my-likes?locale=ru-RU'
         if page_token:
             url += f'&page_token={page_token}'
@@ -116,7 +113,6 @@ class Session:
     @staticmethod
     def get_all_likes(page_token=None) -> []:
         """ Returns a [] of all my likes """
-
         all_likes = []
 
         while True:

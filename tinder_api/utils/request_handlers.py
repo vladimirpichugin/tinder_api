@@ -1,5 +1,4 @@
 import json
-
 import requests
 
 from tinder_api.utils import config
